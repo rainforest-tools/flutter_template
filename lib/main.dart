@@ -1,3 +1,4 @@
+import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_template/pages/home.dart';
 
@@ -10,12 +11,22 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: const Home(),
-    );
+    return FutureBuilder(
+        future: AdaptiveTheme.getThemeMode(),
+        builder:
+            (BuildContext context, AsyncSnapshot<AdaptiveThemeMode?> snapshot) {
+          return AdaptiveTheme(
+              light: ThemeData.light(),
+              dark: ThemeData.dark(),
+              initial: snapshot.data ?? AdaptiveThemeMode.system,
+              builder: (ThemeData theme, ThemeData darkTheme) {
+                return MaterialApp(
+                  title: 'Flutter Demo',
+                  theme: theme,
+                  darkTheme: darkTheme,
+                  home: const Home(),
+                );
+              });
+        });
   }
 }
