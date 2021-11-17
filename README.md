@@ -1,16 +1,55 @@
 # flutter_template
 
-A new Flutter project.
+# Dependencies
 
-## Getting Started
+- [shared_preferences](https://pub.dev/packages/shared_preferences)
+- [intl](https://pub.dev/packages/intl)
+- [intl_utils](https://pub.dev/packages/intl_utils)
+  - [vscode extension](https://marketplace.visualstudio.com/items?itemName=localizely.flutter-intl)
 
-This project is a starting point for a Flutter application.
+# Instructions
 
-A few resources to get you started if this is your first Flutter project:
+- `pubspec.yaml`
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+```yaml
+dependencies:
+  # localization
+  flutter_localizations:
+    sdk: flutter
+  intl: ^0.17.0
+flutter:
+  generate: true
+flutter_intl:
+  enabled: true
+```
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+- `Command + Shift + P` and choose `Flutter Intl: initialize`
+
+  - `Command + Shift + P` and choose `Flutter Intl: Add Locale` to add locale
+
+- `lib/I10n/intl_en.arb`
+
+```json
+{
+  "@@locale": "en",
+  "name": "Rainforest"
+}
+```
+
+- Usage of package `intl` and `intl_utils`, please refer to [lib/main.dart](lib/main.dart)
+- locale info is saved by `shared_preferences`,
+  - you can access it by
+  ```dart
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  prefs.getStringList('locale');
+  // e.g. ['zh', 'TW']
+  ```
+  - and set it by
+  ```dart
+  SharedPreferences _prefs = await SharedPreferences.getInstance();
+  _prefs.setStringList(
+      'locale',
+      [locale.languageCode, locale.countryCode]
+          .whereType<String>()
+          .toList());
+  ```
